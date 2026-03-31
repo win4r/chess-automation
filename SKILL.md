@@ -265,6 +265,79 @@ For play without an engine, these are solid openings:
 - Don't move the queen early
 - Don't leave bishops exposed to pawn attacks (retreat to safety: Bb5 > Ba4 > Bb3 > Bc2)
 
+## Chess Strategy Lessons (from actual games)
+
+### 8. NEVER Sacrifice the Queen Without Forced Mate
+
+**Blunder:** Playing Qxh7+?? hoping for a kingside attack, but Kxh7 simply
+captures the queen with no follow-up. Lost Q for a pawn.
+
+**Rule:** Before any queen sacrifice (Qx on an enemy-defended square), verify:
+- Is there a **forced** mating sequence (not just "pressure")?
+- After Kx, do you have at least 2 attacking pieces aimed at the king?
+- Count the attacker-to-defender ratio around the enemy king
+
+If you can't calculate mate to completion, DON'T sacrifice the queen.
+
+### 9. Stockfish Is Non-Negotiable for Serious Play
+
+Without an engine, the AI makes positional moves well (opening theory, piece
+development) but blunders in tactical complications. **Always install Stockfish
+before playing.** If `brew install stockfish` is rejected, ask the user to
+install it manually — do NOT proceed with "intuition-only" play.
+
+The critical failure mode: the AI recognizes a pattern (Qxh7+ is a common
+attacking motif) but fails to verify the specific position supports it.
+Stockfish eliminates this class of error entirely.
+
+### 10. Material Tracking Discipline
+
+Maintain a running material count after every move. Format:
+
+```
+White: Q R R B N + 7P = ~38
+Black: Q R R B N + 7P = ~38
+```
+
+Before ANY sacrifice or exchange, recalculate and verify the trade is favorable.
+The Qxh7+ blunder happened partly because material tracking was loose — didn't
+fully internalize being down a bishop before launching an attack.
+
+### 11. Don't Send Rooks Into Knight Forks
+
+**Blunder:** Rc7?? walked into Nxc7, losing the rook to the knight.
+
+**Rule:** Before moving a rook to any square, check if an enemy knight can
+reach that square in one move. Knights have 8 possible landing squares —
+verify all of them.
+
+### 12. Passed Pawns Need Piece Support
+
+The e6 passed pawn was dangerous but useless because:
+- The bishop on e7 blocked it
+- No pieces remained to remove the blockader (queen was gone)
+- The rook couldn't reach e7 because own pawn on e6 blocked the file
+
+**Rule:** A passed pawn is only as strong as the pieces supporting it.
+Don't sacrifice major pieces to create a passed pawn — sacrifice to
+**promote** one.
+
+### 13. Board State Parsing Requires Care
+
+The accessibility API returns piece names in a flat comma-separated string
+where piece names themselves contain commas (e.g., "white rook, a1"). This
+makes naive string splitting unreliable.
+
+**Best practice:** Parse by looking for "white " or "black " as delimiters.
+Each piece entry follows the pattern: `<color> <piece>, <square>`.
+
+### 14. Computer Response Time Varies
+
+The Chess.app computer sometimes responds instantly, sometimes takes 3-5
+seconds. Using `sleep 3` works for most moves, but in complex middlegame
+positions, increase to `sleep 4` or `sleep 5`. Always verify "White to Move"
+in the title before attempting your next move.
+
 ## Debugging Checklist
 
 When moves stop working:
