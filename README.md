@@ -1,3 +1,5 @@
+# [🚀观看我的哔哩哔哩视频](https://space.bilibili.com/3493277319825652)
+
 # Chess Automation
 
 Automate macOS Chess.app with Claude Code. Uses the AppleScript accessibility API to read board state, make moves, and play full games against the built-in computer opponent.
